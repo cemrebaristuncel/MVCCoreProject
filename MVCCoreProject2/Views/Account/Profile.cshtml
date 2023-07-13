@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Profile";
+}
+<div class="row">
+    <div class="col-4 offset-4">
+        <h1 class="display-4 border-bottom text-center pb-2">@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-6 offset-6 my-3">
+        <div class="mb-4">
+            <div asp-validation-summary="All" class="text-danger small"></div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <form method="post" asp-action="ProfileChangeImage" enctype="multipart/form-data">
+            <div class="text-center mb-3">
+                <img src="~/uploads/@ViewData["ProfileImage"]" width ="128" class="img-thumbnail rounded-circle" />
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label small">Profile Image<span class="badge bg-danger ms-2">Required</span></label>
+                <input type="file" name ="file" class="form-control" accept=".jpg"/>
+                <div class="text-secondary">
+                    <span class="small">
+                        <i class="fa fa-info-circle me-2"></i>Only jpg files
+                    </span>
+                </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-secondary" type="submit"><i class="fa-solid fa-floppy-disk me-2"></i>Save</button>
+                    </div>
+            </div>
+           
+        </form>
+    </div>
+    <div class="col-6">
+
+        <h2>Settings</h2>
+        <hr />
+        <p class="small">Ut fusce varius nisl ac ipsum gravida vel pretium tellus tincidunt integer eu augue augue nunc elit dolor, luctus placerat.</p>
+
+        <form method="post" asp-action="ProfileChangeFullName">
+            <div class="form-group">
+                <label class="form-label small">Name Surname<span class="badge bg-danger ms-2">Required</span></label>
+                <div class="input-group mb-3">
+                    <input type="text" name="fullname" class="form-control" placeholder="John Doe" value="@ViewData["FullName"]">
+                    <button class="btn btn-secondary" type="submit"><i class="fa-solid fa-floppy-disk me-2"></i>Save</button>
+                </div>
+            </div>
+        </form>
+        <form method="post" asp-action="ProfileChangePassword">
+            <div class="form-group">
+                <label class="form-label small">New Password<span class="badge bg-danger ms-2">Required</span></label>
+                <div class="input-group">
+                    <input type="password" name="password" class="form-control" placeholder="P@ssW0rd!">
+                    <button class="btn btn-secondary" type="submit"><i class="fa-solid fa-floppy-disk me-2"></i>Save</button>
+                    @if (ViewData["result"] != null && ViewData["result"] == "PasswordChanged")
+                    {
+                        <span class="text-success small">Password has been updated!</span>
+
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @if (ViewData["result"] != null && ViewData["result"] == "PasswordChanged")
+    {
+        <script>
+            toastr["success"]("Password has been changed successfully!", "");
+        </script>
+
+    }
+    else if (ViewData["result"] != null && ViewData["result"] == "FullNameChanged")
+    {
+        <script>
+            toastr["success"]("Full name has been changed successfully!", "");
+        </script>
+
+    }
+}
