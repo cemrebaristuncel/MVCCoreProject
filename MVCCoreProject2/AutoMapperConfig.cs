@@ -9,6 +9,8 @@ namespace MVCCoreProject2
         public AutoMapperConfig()
         {
             CreateMap<User, UserViewModel>().ReverseMap();
+            CreateMap<User, CreateUserModel>().ReverseMap();
+            CreateMap<User, EditUserModel>().ReverseMap();
         }
     }
 }
