@@ -40,10 +40,13 @@ namespace MVCCoreProject2.Models
         [Required]
         [StringLength(50)]
         public string Role { get; set; } = "user";
+        public string? Done { get; set; }
     }
 
     public class EditUserModel
     {
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "Username is required.")]
         [MinLength(6, ErrorMessage = "Username must be minimum 6 characters")]
         [MaxLength(16, ErrorMessage = "Username must be maximum 16 characters")]
@@ -58,5 +61,6 @@ namespace MVCCoreProject2.Models
         [Required]
         [StringLength(50)]
         public string Role { get; set; } = "user";
+        public string? Done { get; set; }
     }
 }
