@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MVCCoreProject2.Entities;
+using MVCCoreProject2.Helpers;
 using MVCCoreProject2.Models;
 
 namespace MVCCoreProject2.Controllers
@@ -9,11 +10,13 @@ namespace MVCCoreProject2.Controllers
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
+        private readonly IHasher _hasher;
 
-        public UserController(DatabaseContext databaseContext, IMapper mapper)
+        public UserController(DatabaseContext databaseContext, IMapper mapper, IHasher hasher)
         {
             _databaseContext = databaseContext;
             _mapper = mapper;
+            _hasher = hasher;
         }
 
         public IActionResult Index()
@@ -38,6 +41,7 @@ namespace MVCCoreProject2.Controllers
                     return View(model);
                 }
                 User user = _mapper.Map<User>(model);
+                _hasher.DoMD5HashedString(user.Password);
                 _databaseContext.Users.Add(user);
                 _databaseContext.SaveChanges();
 

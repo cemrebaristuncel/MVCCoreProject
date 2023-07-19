@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MVCCoreProject2.Entities;
+using MVCCoreProject2.Helpers;
 using System.Reflection;
 
 namespace MVCCoreProject2
@@ -30,6 +31,8 @@ namespace MVCCoreProject2
                 opts.SlidingExpiration = false;
             }
             );
+
+            builder.Services.AddScoped<IHasher, Hasher>();
 
             var app = builder.Build();
 

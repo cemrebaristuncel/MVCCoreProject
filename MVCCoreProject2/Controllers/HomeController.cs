@@ -33,5 +33,17 @@ namespace MVCCoreProject2.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult GetData()
+        {
+            return Json(new {Name = "Barış", Surname = "Tunçel"});
+        }
+
+        [HttpPost]
+        public IActionResult PostData([FromBody]PostDataApiModel model)
+        {
+            return Json(new { Error = false, Message = "Success" });
+        }
     }
 }

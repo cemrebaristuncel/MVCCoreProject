@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCCoreProject2.Entities;
+using MVCCoreProject2.Helpers;
 using MVCCoreProject2.Models;
 using NETCore.Encrypt.Extensions;
 using System.ComponentModel.DataAnnotations;
@@ -16,10 +17,12 @@ namespace MVCCoreProject2.Controllers
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IConfiguration _configuration;
-        public AccountController(DatabaseContext databaseContext, IConfiguration configuration)
+        private readonly IHasher _hasher;
+        public AccountController(DatabaseContext databaseContext, IConfiguration configuration, IHasher hasher)
         {
             _databaseContext = databaseContext;
             _configuration = configuration;
+            _hasher = hasher;
         }
 
         [AllowAnonymous]
@@ -40,7 +43,7 @@ namespace MVCCoreProject2.Controllers
         {
             if (ModelState.IsValid)
             {
-                string hashedPassword = DoMD5HashedString(model.Password);
+                string hashedPassword = _hasher.DoMD5HashedString(model.Password);
 
                 User user = _databaseContext.Users.SingleOrDefault(x => x.Username.ToLower() == model.Username.ToLower() && x.Password == hashedPassword);
 
@@ -74,14 +77,6 @@ namespace MVCCoreProject2.Controllers
             return View(model);
         }
 
-        private string DoMD5HashedString(string s)
-        {
-            string md5Salt = _configuration.GetValue<string>("AppSettings:MD5Salt");
-            string salted = s + md5Salt;
-            string hashed = salted.MD5();
-            return hashed;
-        }
-
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Register(RegisterViewModel model)
@@ -93,7 +88,7 @@ namespace MVCCoreProject2.Controllers
             }
             if (ModelState.IsValid)
             {
-                string hashedPassword = DoMD5HashedString(model.Password);
+                string hashedPassword = _hasher.DoMD5HashedString(model.Password);
 
                 User user = new()
                 {
@@ -152,7 +147,7 @@ namespace MVCCoreProject2.Controllers
             {
                 Guid userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 User user = _databaseContext.Users.FirstOrDefault(x => x.Id == userId);
-                string hashedPassword = DoMD5HashedString(password);
+                string hashedPassword = _hasher.DoMD5HashedString(password);
                 user.Password = hashedPassword;
                 _databaseContext.SaveChanges();
 
