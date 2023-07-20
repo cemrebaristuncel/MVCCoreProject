@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCCoreProject2.Entities;
 using MVCCoreProject2.Helpers;
 using MVCCoreProject2.Models;
+using System.Data;
 
 namespace MVCCoreProject2.Controllers
 {
+    [Authorize(Roles = "admin", AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class UserController : Controller
     {
         private readonly DatabaseContext _databaseContext;

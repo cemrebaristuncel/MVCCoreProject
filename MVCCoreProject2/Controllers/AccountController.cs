@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace MVCCoreProject2.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class AccountController : Controller
     {
         private readonly DatabaseContext _databaseContext;
